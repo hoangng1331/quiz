@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "antd";
+import { Button, Modal } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Report = () => {
   const [score, setScore] = useState(0);
+  const [view, setView] = useState(false);
   const location = useLocation();
-  const { questions, startTime, endTime } = location.state || {};
+  const { questions, startTime, endTime, name } = location.state || {};
   let navigate = useNavigate();
-
   let totalScore = 0;
   questions.forEach((question, index) => {
     if (question.correct_answer === question.selected_answer) {
@@ -39,7 +39,7 @@ const Report = () => {
       .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
-  const totalTime = endTime - startTime - questions.length * 3000;
+  const totalTime = endTime - startTime - questions.length * 8000;
 
   return (
     <div className="report-container" style={{ textAlign: "center" }}>
@@ -52,10 +52,17 @@ const Report = () => {
         <Button className="button" onClick={viewResult}>
           View Result
         </Button>
-        <Button className="button" onClick={resetQuiz}>
+        <Button className="button" onClick={()=>{ setView(true)}}>
           Restart Quiz
         </Button>
       </div>
+      <Modal
+      centered
+      open={view}
+      onOk={resetQuiz}
+      onCancel={()=>setView(false)}>
+        <h2>Do you want to take this quiz again?</h2>
+      </Modal>
     </div>
   );
 };

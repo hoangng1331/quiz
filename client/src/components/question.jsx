@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Radio, Spin, message } from "antd";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
 import formatTime from "../helpers/formatTime";
 
@@ -14,10 +14,14 @@ function Question() {
   const [endTime, setEndTime] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(true);
-
+  const [showQuestionInfo, setShowQuestionInfo] = useState(true);
+  const location = useLocation();
+  const { name } = location.state || {};
 
   const navigate = useNavigate();
-
+  if (!name) {
+    navigate("/start");
+  }
   useEffect(() => {
     fetchQuestions();
   }, []);
@@ -30,7 +34,11 @@ function Question() {
         selected_answer: "",
       }));
       setQuestions(data);
-      setStartTime(Date.now()); // Ghi lại thời gian bắt đầu khi lấy được câu hỏi
+      setStartTime(Date.now());
+      setShowQuestionInfo(true);
+      setTimeout(() => {
+        setShowQuestionInfo(false);
+      }, 3000);
     } catch (error) {
       console.log(error);
     }
@@ -48,7 +56,13 @@ function Question() {
   useEffect(() => {
     if (selectedAnswer !== "") {
       if (selectedAnswer === questions[currentQuestion].correct_answer) {
-        const messages = ["Exactly!", "Well-done!", "Excellent!", "Good job!", "Correct!"];
+        const messages = [
+          "Exactly!",
+          "Well-done!",
+          "Excellent!",
+          "Good job!",
+          "Correct!",
+        ];
         const randomIndex = Math.floor(Math.random() * messages.length);
         message.success(messages[randomIndex]);
       } else {
@@ -78,25 +92,28 @@ function Question() {
     setQuestions(updatedQuestions);
     setSelectedAnswer("");
     setCurrentQuestion(currentQuestion + 1);
-    setCurrentTime(0)
+    setCurrentTime(0);
     setIsTimerRunning(true);
+    setShowQuestionInfo(true);
+    setTimeout(() => {
+      setShowQuestionInfo(false);
+    }, 5000);
   };
 
   useEffect(() => {
-    if (isTimerRunning) {
+    if (isTimerRunning && !showQuestionInfo) {
       const timer = setInterval(() => {
         setCurrentTime((prevTime) => prevTime + 1);
       }, 1000);
-    
+
       return () => {
         clearInterval(timer);
       };
     }
-  }, [isTimerRunning]);
-  
-  
+  }, [isTimerRunning, showQuestionInfo]);
+
   const handleQuizFinish = () => {
-    navigate("/report", { state: { questions, startTime, endTime } }); // Truyền thời gian bắt đầu sang trang báo cáo
+    navigate("/report", { state: { questions, startTime, endTime } });
   };
 
   const shuffleArray = (array) => {
@@ -117,7 +134,7 @@ function Question() {
   }
 
   if (currentQuestion >= questions.length) {
-    setEndTime(Date.now())
+    setEndTime(Date.now());
     handleQuizFinish();
     return null;
   }
@@ -125,36 +142,65 @@ function Question() {
   const question = questions[currentQuestion];
 
   return (
-    <div className="question-container">
-      <div>
-        <h2 className="question-text">{question?.question}</h2>
-      </div>
-      <Radio.Group
-        onChange={handleAnswerChange}
-        value={selectedAnswer}
-        style={{ display: "block" }}
-      >
-        {shuffledAnswers.map((answer, index) => (
-          <Radio.Button
-            style={{ borderRadius: 0 }}
-            className={
-              selectedAnswer === answer && answer === question.correct_answer
-                ? "correct-answer"
-                : selectedAnswer === answer && answer !== question.correct_answer
-                ? "wrong-answer"
-                : "answer-option"
-            }
-            key={index}
-            value={answer}
-            disabled={selectedAnswer !== ""}
+    <div
+      className={`question-container ${selectedAnswer !== "" ? "" : "fade-in"}`}
+    >
+      {showQuestionInfo ? (
+        <div className="question-info">
+          <h3>Question {currentQuestion + 1}: </h3>
+          <p className="question-category">
+            This is question about {question.category}
+          </p>
+          <p className="question-difficulty">
+            Difficulty: {question.difficulty}
+          </p>
+        </div>
+      ) : (
+        <>
+          <div
+            className={`question ${selectedAnswer !== "" ? "fade-out" : ""}`}
           >
-            {answer}
-          </Radio.Button>
-        ))}
-      </Radio.Group>
-      <div className="timer">
-    Time: {formatTime(currentTime)}
-  </div>
+            <h2
+              className={`question-text ${
+                selectedAnswer !== "" ? "fade-out" : "fade-in"
+              }`}
+            >
+              {question?.question}
+            </h2>
+          </div>
+          <Radio.Group
+            onChange={handleAnswerChange}
+            value={selectedAnswer}
+            style={{ display: "block" }}
+            className={`question-text ${
+              selectedAnswer !== "" ? "fade-out" : "fade-in"
+            }`}
+          >
+            {shuffledAnswers.map((answer, index) => (
+              <Radio.Button
+                style={{ borderRadius: 0 }}
+                className={
+                  selectedAnswer === answer &&
+                  answer === question.correct_answer
+                    ? "correct-answer"
+                    : selectedAnswer === answer &&
+                      answer !== question.correct_answer
+                    ? "wrong-answer"
+                    : "answer-option"
+                }
+                key={index}
+                value={answer}
+                disabled={selectedAnswer !== ""}
+              >
+                {answer}
+              </Radio.Button>
+            ))}
+          </Radio.Group>
+          <div>
+            <span className="timer">{formatTime(currentTime)}</span>
+          </div>
+        </>
+      )}
     </div>
   );
 }

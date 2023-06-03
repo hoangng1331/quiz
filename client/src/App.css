@@ -67,13 +67,15 @@
   margin-left: auto;
 }
 .question-container {
-  /* max-width: 800px; */
+  max-width: 800px;
   margin: 50px auto;
   padding: 20px;
   background-color: #e2f2f6;
   border-radius: 8px;
   text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
 
 .question-text {
   margin-bottom: 20px;
@@ -163,6 +165,152 @@
 .button {
   margin-right: 0px;
 }
+
+.start-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.start-heading {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.start-image-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.start-image {
+  width: 200px;
+  height: 200px;
+}
+
+.start-button {
+  margin-top: 20px;
+}
+
+.question {
+  transition: opacity 3s ease;
+}
+
+.option {
+  transition: opacity 3s ease;
+}
+
+
+.fade-out {
+  opacity: 0;
+}
+.timer {
+  font-weight: bold;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+.question-info {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #f2f2f2;
+  border-radius: 8px;
+}
+
+.question-category,
+.question-difficulty {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.question-category::before,
+.question-difficulty::before {
+  content: "";
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.question-text {
+  transform: translateY(-20px);
+  transition: opacity 5s ease, transform 5s ease;
+}
+
+.question-text.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.question-text.fade-out {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+
+
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.question-container {
+  animation: flyOutDown 3s ease forwards;
+}
+
+.question-container {
+  transition: transform 0.5s ease;
+}
+
+.question-container.fade-out {
+  transform: scale(0.5);
+  opacity: 0;
+}
+
+.question-container.fade-in {
+  transform: scale(1);
+  opacity: 1;
+}
+
+
+@keyframes flyOutDown {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.5);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+.question-container.fade-in {
+  animation: flyInUp 0.5s ease forwards;
+}
+
+@keyframes flyInUp {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(0.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 
 
 @keyframes App-logo-spin {
