@@ -22,20 +22,6 @@ function Question() {
   if (!name) {
     navigate("/start");
   }
-  const [showModal, setShowModal] = useState(false);
-
-  useEffect(() => {
-    const handlePopState = (e) => {
-      setShowModal(true);
-      window.history.pushState(null, null, window.location.pathname);
-    };
-
-    window.addEventListener("popstate", handlePopState);
-
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, []);
 
   useEffect(() => {
     const handleBeforeUnload = (e) => {
@@ -53,19 +39,6 @@ function Question() {
     };
   }, [currentQuestion, questions]);
 
-  const handleLeaveConfirmation = () => {
-    setShowModal(true);
-  };
-
-  const handleLeaveCancel = () => {
-    setShowModal(false);
-  };
-
-  const handleLeaveConfirm = () => {
-    setShowModal(false);
-    // Thực hiện hành động khi người dùng chọn "OK" để rời khỏi trang
-    // Ví dụ: navigate đến trang khác hoặc làm một hành động khác
-  };
   useEffect(() => {
     fetchQuestions();
   }, []);
@@ -245,16 +218,6 @@ function Question() {
           </div>
         </>
       )}
-      <Modal
-        visible={showModal}
-        onCancel={handleLeaveCancel}
-        onOk={handleLeaveConfirm}
-        title="Confirmation"
-        cancelText="Cancel"
-        okText="OK"
-      >
-        The quiz is not over yet, do you really want to escape?
-      </Modal>
     </div>
   );
 }

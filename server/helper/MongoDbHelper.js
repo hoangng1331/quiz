@@ -1,14 +1,17 @@
-'use strict';
-const { CONNECTION_STRING, DATABASE_NAME } = require('../constants/dbSettings');
+"use strict";
+const { CONNECTION_STRING, DATABASE_NAME } = require("../constants/dbSettings");
 // Khai báo thư viện MongoClient
-const { MongoClient, ObjectId } = require('mongodb');
+const { MongoClient, ObjectId } = require("mongodb");
 
 // INSERT: Thêm mới (một)
 // insertDocument({ name: 'Peter', email: 'peter@gmail.com' }, 'employees').then((result) => {}).catch(err => {});
 
 function insertDocument(data, collectionName) {
   return new Promise((resolve, reject) => {
-    MongoClient.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true })
+    MongoClient.connect(CONNECTION_STRING, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
       .then((client) => {
         const dbo = client.db(DATABASE_NAME);
         const collection = dbo.collection(collectionName);
@@ -33,7 +36,10 @@ function insertDocument(data, collectionName) {
 // INSERT: Thêm mới (nhiều)
 function insertDocuments(list, collectionName) {
   return new Promise((resolve, reject) => {
-    MongoClient.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true })
+    MongoClient.connect(CONNECTION_STRING, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
       .then((client) => {
         const dbo = client.db(DATABASE_NAME);
         const collection = dbo.collection(collectionName);
@@ -56,41 +62,21 @@ function insertDocuments(list, collectionName) {
 
 // ----------------------------------------------------------------------------
 // UPDATE: Sửa
-// function updateDocument(id, data, collectionName) {
-//   return new Promise((resolve, reject) => {
-//     MongoClient.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true })
-//       .then((client) => {
-//         const dbo = client.db(DATABASE_NAME);
-//         const collection = dbo.collection(collectionName);
-//         const query = { _id: new ObjectId(id) };
-//         collection
-//           .findOneAndUpdate(query, { $set: data })
-//           .then((result) => {
-//             client.close();
-//             resolve(result);
-//           })
-//           .catch((err) => {
-//             client.close();
-//             reject(err);
-//           });
-//       })
-//       .catch((err) => {
-//         reject(err);
-//       });
-//   });
-// }
-function updateDocument(id, data, collectionName, options = {}) {
+function updateDocument(id, data, collectionName) {
   return new Promise((resolve, reject) => {
-    MongoClient.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true })
+    MongoClient.connect(CONNECTION_STRING, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
       .then((client) => {
         const dbo = client.db(DATABASE_NAME);
         const collection = dbo.collection(collectionName);
         const query = { _id: new ObjectId(id) };
         collection
-          .findOneAndUpdate(query, data, { ...options, returnOriginal: false })
+          .findOneAndUpdate(query, { $set: data })
           .then((result) => {
             client.close();
-            resolve(result.value);
+            resolve(result);
           })
           .catch((err) => {
             client.close();
@@ -102,12 +88,38 @@ function updateDocument(id, data, collectionName, options = {}) {
       });
   });
 }
+// function updateDocument(id, data, collectionName, options = {}) {
+//   return new Promise((resolve, reject) => {
+//     MongoClient.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true })
+//       .then((client) => {
+//         const dbo = client.db(DATABASE_NAME);
+//         const collection = dbo.collection(collectionName);
+//         const query = { _id: new ObjectId(id) };
+//         collection
+//           .findOneAndUpdate(query, data, { ...options, returnOriginal: false })
+//           .then((result) => {
+//             client.close();
+//             resolve(result.value);
+//           })
+//           .catch((err) => {
+//             client.close();
+//             reject(err);
+//           });
+//       })
+//       .catch((err) => {
+//         reject(err);
+//       });
+//   });
+// }
 
 // ----------------------------------------------------------------------------
 // UPDATE: Sửa (nhiều)
 function updateDocuments(query, data, collectionName) {
   return new Promise((resolve, reject) => {
-    MongoClient.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true })
+    MongoClient.connect(CONNECTION_STRING, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
       .then((client) => {
         const dbo = client.db(DATABASE_NAME);
         const collection = dbo.collection(collectionName);
@@ -132,11 +144,14 @@ function updateDocuments(query, data, collectionName) {
 // REMOVE: Xoá
 function deleteDocument(id, collectionName) {
   return new Promise((resolve, reject) => {
-    MongoClient.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true })
+    MongoClient.connect(CONNECTION_STRING, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
       .then((client) => {
         const dbo = client.db(DATABASE_NAME);
         const collection = dbo.collection(collectionName);
-        const query = { _id:  new ObjectId(id) };
+        const query = { _id: new ObjectId(id) };
         collection
           .deleteOne(query)
           .then((result) => {
@@ -158,7 +173,10 @@ function deleteDocument(id, collectionName) {
 // REMOVE: Xoá (nhiều)
 function deleteDocuments(query, collectionName) {
   return new Promise((resolve, reject) => {
-    MongoClient.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true })
+    MongoClient.connect(CONNECTION_STRING, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
       .then((client) => {
         const dbo = client.db(DATABASE_NAME);
         const collection = dbo.collection(collectionName);
@@ -182,7 +200,10 @@ function deleteDocuments(query, collectionName) {
 // FIND: Tìm kiếm (id)
 function findDocument(id, collectionName) {
   return new Promise((resolve, reject) => {
-    MongoClient.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true })
+    MongoClient.connect(CONNECTION_STRING, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
       .then((client) => {
         const dbo = client.db(DATABASE_NAME);
         const collection = dbo.collection(collectionName);
@@ -211,9 +232,9 @@ function findDocument(id, collectionName) {
 //       .then((client) => {
 //         const dbo = client.db(DATABASE_NAME);
 //         const collection = dbo.collection(collectionName);
-//         const query = { 
-//           _id: new ObjectId(id), 
-//           'variants._id': new ObjectId(variantId) 
+//         const query = {
+//           _id: new ObjectId(id),
+//           'variants._id': new ObjectId(variantId)
 //         };
 
 //         collection
@@ -234,12 +255,24 @@ function findDocument(id, collectionName) {
 //   });
 // }
 
-
 // ----------------------------------------------------------------------------
 // FIND: Tìm kiếm (nhiều)
-function findDocuments({ query = null, sort = null, limit = 50, aggregate = [], skip = 0, projection = null }, collectionName) {
+function findDocuments(
+  {
+    query = null,
+    sort = null,
+    limit = 50,
+    aggregate = [],
+    skip = 0,
+    projection = null,
+  },
+  collectionName
+) {
   return new Promise((resolve, reject) => {
-    MongoClient.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true })
+    MongoClient.connect(CONNECTION_STRING, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
       .then((client) => {
         const dbo = client.db(DATABASE_NAME);
         const collection = dbo.collection(collectionName);
@@ -277,4 +310,13 @@ function findDocuments({ query = null, sort = null, limit = 50, aggregate = [], 
   });
 }
 
-module.exports = { insertDocument, insertDocuments, updateDocument, updateDocuments, deleteDocument, deleteDocuments, findDocument, findDocuments };
+module.exports = {
+  insertDocument,
+  insertDocuments,
+  updateDocument,
+  updateDocuments,
+  deleteDocument,
+  deleteDocuments,
+  findDocument,
+  findDocuments,
+};

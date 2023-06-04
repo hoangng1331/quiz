@@ -45,6 +45,7 @@ const playerSchema = new Schema({
     },
   },
   birthday: { type: Date },
+  password: { type: String, required: true },
 });
 
 // Virtuals

@@ -1,12 +1,12 @@
-const fs = require('fs');
-const path = require('path');
-const express = require('express');
+const fs = require("fs");
+const path = require("path");
+const express = require("express");
 const router = express.Router();
 // MULTER UPLOAD
-const multer = require('multer');
-const { updateDocument, findDocument } = require('../helpers/MongoDbHelper');
+const multer = require("multer");
+const { updateDocument, findDocument } = require("../helper/MongoDbHelper");
 
-const UPLOAD_DIRECTORY = './public/uploads';
+const UPLOAD_DIRECTORY = "./public/uploads";
 
 var upload = multer({
   storage: multer.diskStorage({
@@ -27,46 +27,56 @@ var upload = multer({
       callback(null, safeFileName);
     },
   }),
-}).single('file');
+}).single("file");
 
 // http://127.0.0.1:9000/upload/categories/63293fea50d2f78624e0c6f3/image
-router.post('/:collectionName/:id/image', async (req, res, next) => {
+router.post("/:collectionName/:id/image", async (req, res, next) => {
   const { collectionName, id } = req.params;
 
   const found = await findDocument(id, collectionName);
   if (!found) {
-    return res.status(410).json({ message: `${collectionName} with id ${id} not found` });
+    return res
+      .status(410)
+      .json({ message: `${collectionName} with id ${id} not found` });
   }
 
   upload(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
-      res.status(500).json({ type: 'MulterError', err: err });
+      res.status(500).json({ type: "MulterError", err: err });
     } else if (err) {
-      res.status(500).json({ type: 'UnknownError', err: err });
+      res.status(500).json({ type: "UnknownError", err: err });
     } else {
       // UPDATE MONGODB
-      updateDocument(id, { imageUrl: `/uploads/${collectionName}/${id}/${req.file.filename}` }, collectionName);
+      updateDocument(
+        id,
+        { imageUrl: `/uploads/${collectionName}/${id}/${req.file.filename}` },
+        collectionName
+      );
       //
       // console.log('host', req.get('host'));
-      const publicUrl = `${req.protocol}://${req.get('host')}/uploads/${collectionName}/${id}/${req.file.filename}`;
+      const publicUrl = `${req.protocol}://${req.get(
+        "host"
+      )}/uploads/${collectionName}/${id}/${req.file.filename}`;
       res.status(200).json({ ok: true, publicUrl: publicUrl });
     }
   });
 });
 
 // http://127.0.0.1:9000/upload/categories/63293fea50d2f78624e0c6f3/images
-router.post('/:collectionName/:id/images', async (req, res, next) => {
+router.post("/:collectionName/:id/images", async (req, res, next) => {
   const { collectionName, id } = req.params;
   const found = await findDocument(id, collectionName);
   if (!found) {
-    return res.status(410).json({ message: `${collectionName} with id ${id} not found` });
+    return res
+      .status(410)
+      .json({ message: `${collectionName} with id ${id} not found` });
   }
 
   upload(req, res, async (err) => {
     if (err instanceof multer.MulterError) {
-      res.status(500).json({ type: 'MulterError', err: err });
+      res.status(500).json({ type: "MulterError", err: err });
     } else if (err) {
-      res.status(500).json({ type: 'UnknownError', err: err });
+      res.status(500).json({ type: "UnknownError", err: err });
     } else {
       // UPDATE MONGODB
       const newImageUrl = `/uploads/${collectionName}/${id}/${req.file.filename}`;
@@ -80,7 +90,9 @@ router.post('/:collectionName/:id/images', async (req, res, next) => {
       await updateDocument(id, { images: images }, collectionName);
 
       // console.log('host', req.get('host'));
-      const publicUrl = `${req.protocol}://${req.get('host')}/uploads/${collectionName}/${id}/${req.file.filename}`;
+      const publicUrl = `${req.protocol}://${req.get(
+        "host"
+      )}/uploads/${collectionName}/${id}/${req.file.filename}`;
       res.status(200).json({ ok: true, publicUrl: publicUrl });
     }
   });
@@ -88,7 +100,8 @@ router.post('/:collectionName/:id/images', async (req, res, next) => {
 
 function toSafeFileName(fileName) {
   const fileInfo = path.parse(fileName);
-  const safeFileName = fileInfo.name.replace(/[^a-z0-9]/gi, '-').toLowerCase() + fileInfo.ext;
+  const safeFileName =
+    fileInfo.name.replace(/[^a-z0-9]/gi, "-").toLowerCase() + fileInfo.ext;
   return safeFileName;
 }
 

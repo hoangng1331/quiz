@@ -28,7 +28,7 @@ const resultSchema = new Schema({
   },
   startTime: { type: Date, required: true },
   endTime: { type: Date, required: true },
-  score: { type: Number, required: true },
+  score: { type: Number, required: false },
 });
 //
 
