@@ -52,7 +52,6 @@
   font-weight: bold;
 }
 
-
 .answer {
   margin-bottom: 5px;
 }
@@ -76,7 +75,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-
 .question-text {
   margin-bottom: 20px;
   font-size: 18px;
@@ -91,7 +89,7 @@
 .next-button {
   margin-top: 20px;
 }
-  
+
 .question-loading {
   display: flex;
   justify-content: center;
@@ -106,21 +104,24 @@
 }
 
 .ant-radio-button-wrapper {
-  width: 100%; 
+  width: 100%;
 }
 .answer-option.ant-radio-button-wrapper-checked {
-  background-color: #ffc118; 
-  color: #fff; 
+  background-color: #ffc118;
+  color: #fff;
   border-color: #c3d173;
 }
 .correct-answer.ant-radio-button-wrapper-checked {
-  background-color: #b7eb8f; 
+  background-color: #b7eb8f;
   display: block;
   margin-bottom: 10px;
 }
+.menu {
+  z-index: 9999;
+}
 
 .wrong-answer.ant-radio-button-wrapper-checked {
-  background-color: #ffa39e; 
+  background-color: #ffa39e;
   display: block;
   margin-bottom: 10px;
 }
@@ -200,7 +201,6 @@
   transition: opacity 3s ease;
 }
 
-
 .fade-out {
   opacity: 0;
 }
@@ -224,7 +224,9 @@
   font-weight: bold;
   margin-bottom: 10px;
 }
-
+.content {
+  min-height: 79.35vh;
+}
 .question-category::before,
 .question-difficulty::before {
   content: "";
@@ -249,9 +251,19 @@
   opacity: 0;
   transform: translateY(20px);
 }
+.footer-bar {
+  font-size: x-large;
+  font-style: bold;
+}
 
-
-
+@keyframes slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
 
 @keyframes fade-in {
   0% {
@@ -263,9 +275,28 @@
     transform: translateY(0);
   }
 }
+.header {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.header h1 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.footer {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
 
 .question-container {
-  animation: flyOutDown 3s ease forwards;
+  animation: flyOutDown 1s ease forwards;
 }
 
 .question-container {
@@ -282,13 +313,9 @@
   opacity: 1;
 }
 
-
 @keyframes flyOutDown {
   0% {
     transform: scale(1);
-  }
-  50% {
-    transform: scale(0.5);
   }
   100% {
     transform: scale(0);
@@ -296,22 +323,17 @@
 }
 
 .question-container.fade-in {
-  animation: flyInUp 0.5s ease forwards;
+  animation: flyInUp 1s ease forwards;
 }
 
 @keyframes flyInUp {
   0% {
     transform: scale(0);
   }
-  50% {
-    transform: scale(0.5);
-  }
   100% {
     transform: scale(1);
   }
 }
-
-
 
 @keyframes App-logo-spin {
   from {

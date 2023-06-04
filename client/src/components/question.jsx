@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Radio, Spin, message } from "antd";
+import { Radio, Spin, message, Modal } from "antd";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -22,6 +22,50 @@ function Question() {
   if (!name) {
     navigate("/start");
   }
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const handlePopState = (e) => {
+      setShowModal(true);
+      window.history.pushState(null, null, window.location.pathname);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      if (currentQuestion < questions.length) {
+        e.returnValue = "";
+        navigate("/question");
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [currentQuestion, questions]);
+
+  const handleLeaveConfirmation = () => {
+    setShowModal(true);
+  };
+
+  const handleLeaveCancel = () => {
+    setShowModal(false);
+  };
+
+  const handleLeaveConfirm = () => {
+    setShowModal(false);
+    // Thực hiện hành động khi người dùng chọn "OK" để rời khỏi trang
+    // Ví dụ: navigate đến trang khác hoặc làm một hành động khác
+  };
   useEffect(() => {
     fetchQuestions();
   }, []);
@@ -201,6 +245,16 @@ function Question() {
           </div>
         </>
       )}
+      <Modal
+        visible={showModal}
+        onCancel={handleLeaveCancel}
+        onOk={handleLeaveConfirm}
+        title="Confirmation"
+        cancelText="Cancel"
+        okText="OK"
+      >
+        The quiz is not over yet, do you really want to escape?
+      </Modal>
     </div>
   );
 }
