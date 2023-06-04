@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
 import formatTime from "../helpers/formatTime";
+import { API_URL } from "../constants/URLS";
 
 function Question() {
   const [questions, setQuestions] = useState([]);
@@ -15,6 +16,8 @@ function Question() {
   const [currentTime, setCurrentTime] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(true);
   const [showQuestionInfo, setShowQuestionInfo] = useState(true);
+  const [completed, setCompleted] = useState(false);
+
   const location = useLocation();
   const { name } = location.state || {};
 
@@ -128,9 +131,8 @@ function Question() {
       };
     }
   }, [isTimerRunning, showQuestionInfo]);
-
   const handleQuizFinish = () => {
-    navigate("/report", { state: { questions, startTime, endTime } });
+    navigate("/report", { state: { questions, startTime, endTime, name } });
   };
 
   const shuffleArray = (array) => {
@@ -149,13 +151,20 @@ function Question() {
       </div>
     );
   }
-
   if (currentQuestion >= questions.length) {
-    setEndTime(Date.now());
+    if (!completed) {
+      setCompleted(true);
+      setEndTime(Date.now());
+    }
+    axios.post(`${API_URL}/results`, {
+      name: name,
+      startTime: startTime,
+      endTime: endTime,
+      questions: questions,
+    });
     handleQuizFinish();
     return null;
   }
-
   const question = questions[currentQuestion];
 
   return (

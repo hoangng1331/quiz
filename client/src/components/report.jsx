@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import axios from "axios";
+import { API_URL } from "../constants/URLS";
 const Report = () => {
   const [score, setScore] = useState(0);
   const [view, setView] = useState(false);
@@ -14,6 +15,10 @@ const Report = () => {
       totalScore++;
     }
   });
+
+  if (questions.length === 0) {
+    navigate("/start");
+  }
 
   useEffect(() => {
     setScore(totalScore);
@@ -52,15 +57,21 @@ const Report = () => {
         <Button className="button" onClick={viewResult}>
           View Result
         </Button>
-        <Button className="button" onClick={()=>{ setView(true)}}>
+        <Button
+          className="button"
+          onClick={() => {
+            setView(true);
+          }}
+        >
           Restart Quiz
         </Button>
       </div>
       <Modal
-      centered
-      open={view}
-      onOk={resetQuiz}
-      onCancel={()=>setView(false)}>
+        centered
+        open={view}
+        onOk={resetQuiz}
+        onCancel={() => setView(false)}
+      >
         <h2>Do you want to take this quiz again?</h2>
       </Modal>
     </div>
