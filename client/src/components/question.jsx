@@ -158,14 +158,19 @@ function Question() {
       setCompleted(true);
       setEndTime(Date.now());
     }
-    axios.post(`${API_URL}/results`, {
-      name: name ?? auth?.loggedInUser?.fullName,
-      playerId: auth?.loggedInUser?._id,
-      startTime: startTime,
-      endTime: endTime,
-      questions: questions,
-    });
-    handleQuizFinish();
+    if (endTime) {
+      axios
+        .post(`${API_URL}/results`, {
+          name: name ?? auth?.loggedInUser?.fullName,
+          playerId: auth?.loggedInUser?._id,
+          startTime: startTime,
+          endTime: endTime,
+          questions: questions,
+        })
+        .then((res) => {
+          handleQuizFinish();
+        });
+    }
     return null;
   }
   const question = questions[currentQuestion];
