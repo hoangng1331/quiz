@@ -22,7 +22,13 @@ function App() {
           className="header"
           style={{ display: "flex", justifyContent: "space-between" }}
         >
-          <h1>Online Quiz</h1>
+          <h1
+            onClick={() => {
+              <Navigate to="/start" replace />;
+            }}
+          >
+            Online Quiz
+          </h1>
           {auth && (
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               {" "}
