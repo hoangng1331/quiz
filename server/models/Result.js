@@ -28,6 +28,7 @@ const resultSchema = new Schema({
   },
   startTime: { type: Date, required: true },
   endTime: { type: Date, required: true },
+  package_question: { type: Number, required: true },
 });
 
 resultSchema.virtual("score").get(function () {
@@ -52,9 +53,6 @@ resultSchema.virtual("status").get(function () {
   } else {
     return "Fail";
   }
-});
-resultSchema.virtual("package_question").get(function () {
-  return this.questions.length;
 });
 
 // Virtuals in console.log()

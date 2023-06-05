@@ -173,6 +173,7 @@ function Question() {
           startTime: startTime,
           endTime: endTime,
           questions: questions,
+          package_question: pack,
         })
         .then((res) => {
           handleQuizFinish();
