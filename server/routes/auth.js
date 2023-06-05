@@ -24,10 +24,9 @@ const loginSchema = yup.object({
 // LOGIN WITH JWT + REFRESH TOKEN
 // ------------------------------------------------------------------------------------------------
 router.post("/login-jwt", async (req, res, next) => {
-  const { username, password } = req.body;
-
+  const { email, password } = req.body;
   const found = await Player.findOne({
-    username,
+    email,
     password,
   });
 

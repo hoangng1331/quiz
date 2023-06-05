@@ -5,8 +5,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
 import formatTime from "../helpers/formatTime";
 import { API_URL } from "../constants/URLS";
+import { useAuth } from "../hooks/useAuth";
 
 function Question() {
+  const { auth } = useAuth((state) => state);
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState("");
@@ -22,7 +24,7 @@ function Question() {
   const { name } = location.state || {};
 
   const navigate = useNavigate();
-  if (!name) {
+  if (!name && !auth) {
     navigate("/start");
   }
 
@@ -157,7 +159,8 @@ function Question() {
       setEndTime(Date.now());
     }
     axios.post(`${API_URL}/results`, {
-      name: name,
+      name: name ?? auth?.loggedInUser?.fullName,
+      playerId: auth?.loggedInUser?._id,
       startTime: startTime,
       endTime: endTime,
       questions: questions,

@@ -1,20 +1,50 @@
 import React from "react";
-import { Button, Image, Form, Modal, Input, message } from "antd";
+import { Button, Image, Form, Modal, Input, message, Drawer } from "antd";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 const Start = () => {
-  const [viewModal, setViewModal] = React.useState(false);
-  let navigate = useNavigate();
-  const onClick = (value) => {
-    const name = value.name;
-    console.log(name);
-    if (name) {
-      navigate("/question", { state: { name } });
+  const { auth } = useAuth((state) => state);
+  const [showDrawer, setShowDrawer] = React.useState(false);
+  const [showModal, setShowModal] = React.useState(false);
+  const [createForm] = Form.useForm();
+  const navigate = useNavigate();
+
+  const handleStartQuiz = () => {
+    if (auth) {
+      navigate("/question", { state: { name: auth.name } });
     } else {
-      message.error("Input your name, please!");
+      setShowDrawer(true);
     }
   };
-  const [createForm] = Form.useForm();
+
+  const handleLogin = () => {
+    setShowDrawer(false);
+    navigate("/login");
+  };
+
+  const handleStartNow = () => {
+    setShowDrawer(false);
+    setShowModal(true);
+  };
+
+  const handleModalOk = () => {
+    createForm
+      .validateFields()
+      .then((values) => {
+        createForm.resetFields();
+        setShowModal(false);
+        navigate("/question", { state: { name: values.name } });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleModalCancel = () => {
+    setShowModal(false);
+  };
+
   return (
     <div className="start-container">
       <h2 className="start-heading">Welcome</h2>
@@ -26,29 +56,41 @@ const Start = () => {
           className="start-image"
         />
       </div>
-      <Button
-        type="primary"
-        onClick={() => {
-          setViewModal(true);
-        }}
-        className="start-button"
-      >
+      <Button type="primary" onClick={handleStartQuiz} className="start-button">
         Start Quiz
       </Button>
+
+      <Drawer
+        title="Get Started"
+        placement="top"
+        closable={true}
+        onClose={() => setShowDrawer(false)}
+        visible={showDrawer}
+        height={200}
+      >
+        <Button type="primary" block onClick={handleStartNow}>
+          Start Now
+        </Button>
+        <Button type="default" block onClick={handleLogin}>
+          Log in
+        </Button>
+      </Drawer>
+
       <Modal
         centered
-        open={viewModal}
-        onOk={() => {
-          createForm.submit();
-        }}
-        onCancel={() => {
-          setViewModal(false);
-        }}
+        visible={showModal}
+        onOk={handleModalOk}
+        onCancel={handleModalCancel}
         title="Let me know your name"
       >
-        <Form form={createForm} onFinish={onClick}>
-          <Form.Item name="name" required hasFeedback>
-            <Input />
+        <Form form={createForm}>
+          <Form.Item
+            name="name"
+            required
+            hasFeedback
+            rules={[{ required: true, message: "Please input your name" }]}
+          >
+            <Input placeholder="Your name" />
           </Form.Item>
         </Form>
       </Modal>

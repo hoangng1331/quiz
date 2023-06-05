@@ -29,7 +29,35 @@ const resultSchema = new Schema({
   startTime: { type: Date, required: true },
   endTime: { type: Date, required: true },
 });
-//
+
+resultSchema.virtual("score").get(function () {
+  return this.questions.filter(
+    (question) => question.selected_answer === question.correct_answer
+  ).length;
+});
+
+resultSchema.virtual("score").get(function () {
+  return this.questions.filter(
+    (question) => question.selected_answer === question.correct_answer
+  ).length;
+});
+resultSchema.virtual("status").get(function () {
+  if (
+    this.questions.filter(
+      (question) => question.selected_answer === question.correct_answer
+    ).length >=
+    this.questions.length / 2
+  ) {
+    return "Pass";
+  } else {
+    return "Fail";
+  }
+});
+
+// Virtuals in console.log()
+resultSchema.set("toObject", { virtuals: true });
+// Virtuals in JSON
+resultSchema.set("toJSON", { virtuals: true });
 
 const Result = model("Result", resultSchema);
 

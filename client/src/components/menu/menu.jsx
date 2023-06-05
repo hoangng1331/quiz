@@ -1,58 +1,51 @@
 import React from "react";
-import { Layout, Menu } from "antd";
+import { Menu } from "antd";
 import {
   BarChartOutlined,
   UserOutlined,
   HomeOutlined,
 } from "@ant-design/icons";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  Link,
-  useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 function MainMenu() {
   let navigate = useNavigate();
+
   return (
     <Menu
       className="menu"
       style={{
         width: "100%",
-        justifyContent: "center",
+        display: "flex",
+        justifyContent: "space-between",
         position: "fixed",
         bottom: 0,
         fontSize: "xx-large",
       }}
-      theme="dark"
+      theme="light"
       mode="horizontal"
       defaultSelectedKeys={["2"]}
       onSelect={(value) => {
         navigate("/" + value.key);
       }}
     >
-      {" "}
-      <Menu.Item key="charts">
-        <BarChartOutlined
-          style={{
-            fontSize: "x-large",
-          }}
-        />
+      <Menu.Item key="top" style={{ position: "absolute", left: 0 }}>
+        <BarChartOutlined style={{ fontSize: "x-large" }} />{" "}
+        <strong className="hide-on-mobile">Ranking</strong>
       </Menu.Item>
-      <Menu.Item key="start">
-        <HomeOutlined
-          style={{
-            fontSize: "x-large",
-          }}
-        />
+      <Menu.Item
+        key="start"
+        style={{
+          position: "absolute",
+          left: "50%",
+          transform: "translateX(-50%)",
+        }}
+      >
+        <HomeOutlined style={{ fontSize: "x-large" }} />{" "}
+        <strong className="hide-on-mobile">Home</strong>
       </Menu.Item>
       <Menu.Item key="profile">
-        <UserOutlined
-          style={{
-            fontSize: "x-large",
-          }}
-        />
+        <UserOutlined style={{ fontSize: "x-large" }} />{" "}
+        <strong className="hide-on-mobile">Profile</strong>
       </Menu.Item>
     </Menu>
   );
