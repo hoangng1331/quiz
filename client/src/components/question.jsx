@@ -161,7 +161,7 @@ function Question() {
       setCompleted(true);
       setEndTime(Date.now());
     }
-    if (endTime) {
+    if (endTime && completed) {
       axios
         .post(`${API_URL}/results`, {
           name: name ?? auth?.loggedInUser?.fullName,

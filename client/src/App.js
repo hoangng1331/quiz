@@ -18,6 +18,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import ChangePass from "./components/player/ChangePassword";
 import ProfileMenu from "./components/menu/profilemenu";
 import History from "./components/player/history";
+import HistoryDetails from "./components/player/historydetails";
 
 const { Header, Content, Footer } = Layout;
 function App() {
@@ -91,6 +92,7 @@ function App() {
 
                 <Route path="/profile/information" element={<Information />} />
                 <Route path="/profile/history" element={<History />} />
+                <Route path="/results/:resultId" element={<HistoryDetails />} />
                 <Route
                   path="/login"
                   element={<Navigate to="/profile/information" replace />}
@@ -103,6 +105,10 @@ function App() {
             )}
             {!auth && (
               <>
+                <Route
+                  path="/results/:resultId"
+                  element={<Navigate to="/login" replace />}
+                />
                 <Route
                   path="/profile/changepass"
                   element={<Navigate to="/login" replace />}
