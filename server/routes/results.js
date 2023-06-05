@@ -97,4 +97,21 @@ router.delete("/:_id", function (req, res, next) {
   }
 });
 
+//Query
+
+router.get("/playerId/:playerId", function (req, res, next) {
+  try {
+    const { playerId } = req.params;
+    Result.find({ playerId })
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((err) => {
+        res.status(400).send({ message: err.message });
+      });
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
+
 module.exports = router;

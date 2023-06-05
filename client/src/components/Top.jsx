@@ -9,7 +9,6 @@ import { GrScorecard } from "react-icons/gr";
 import { MdNumbers } from "react-icons/md";
 const RankingTable = () => {
   const [rankingData, setRankingData] = useState([]);
-  const [questions, setQuestions] = useState([]);
   const formatTime = (time) => {
     const seconds = Math.floor((time / 1000) % 60);
     const minutes = Math.floor((time / 1000 / 60) % 60);
@@ -23,7 +22,6 @@ const RankingTable = () => {
     axios
       .get(`${API_URL}/results`)
       .then((response) => {
-        setQuestions(response.data);
         const filteredData = response.data.filter(
           (item) => item.status === "Pass"
         );

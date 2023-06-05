@@ -72,7 +72,7 @@ const Report = () => {
         onOk={resetQuiz}
         onCancel={() => setView(false)}
       >
-        <h2>Do you want to take this quiz again?</h2>
+        <h4>Do you want to take this quiz again?</h4>
       </Modal>
     </div>
   );

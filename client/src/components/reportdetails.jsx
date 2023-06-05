@@ -14,7 +14,9 @@ const ReportDetails = () => {
       {questions.map((question, index) => (
         <div className="question" key={index}>
           <h3>Question {index + 1}:</h3>
-          <p className="question-text">{question.question}</p>
+          <p className="question-text" style={{ marginTop: 25 }}>
+            {question.question}
+          </p>
           <Radio.Group
             value={question.selected_answer}
             style={{ display: "block" }}
@@ -39,9 +41,9 @@ const ReportDetails = () => {
             ))}
           </Radio.Group>
           {question.selected_answer !== question.correct_answer && (
-             <p className="answer">
-             Correct Answer: <span>{question.correct_answer}</span>
-           </p>
+            <p className="answer">
+              Correct Answer: <span>{question.correct_answer}</span>
+            </p>
           )}
         </div>
       ))}

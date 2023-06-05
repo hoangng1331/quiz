@@ -91,6 +91,10 @@
   }
 }
 
+.active {
+  color: white;
+  text-decoration: none;
+}
 .hide-on-mobile {
   font-size: medium;
 }
@@ -121,6 +125,7 @@
 }
 
 .answer-option {
+  text-align: center;
   display: block;
   margin-bottom: 10px;
 }
@@ -143,14 +148,18 @@
 }
 
 .ant-radio-button-wrapper {
+  text-align: center;
   width: 100%;
 }
 .answer-option.ant-radio-button-wrapper-checked {
+  text-align: center;
   background-color: #ffc118;
   color: #fff;
+  height: 70px;
   border-color: #c3d173;
 }
 .correct-answer.ant-radio-button-wrapper-checked {
+  text-align: center;
   background-color: #b7eb8f;
   display: block;
   margin-bottom: 10px;
@@ -188,6 +197,15 @@
 .short-input {
   width: 100px;
   margin-bottom: 10px;
+}
+
+.container-table Table {
+}
+
+@media screen and (max-width: 767px) {
+  .container-table Table {
+    font-size: 10px;
+  }
 }
 
 .login-form-label {

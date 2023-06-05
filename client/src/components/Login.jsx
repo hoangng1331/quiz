@@ -1,5 +1,5 @@
 import React from "react";
-import { Drawer, Form, Input, Button, Divider } from "antd";
+import { Form, Input, Button, Divider } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -74,7 +74,7 @@ export default function Login() {
             htmlType="submit"
             className="login-form-button"
           >
-            Đăng nhập
+            Log in
           </Button>
         </Form.Item>
         <Form.Item>

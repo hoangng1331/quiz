@@ -32,7 +32,7 @@ export const useAuth = create(
         },
       }),
       {
-        name: "onlineshop-storage", // unique name
+        name: "quiz-storage", // unique name
         storage: createJSONStorage(() => localStorage), // (optional) by default, 'localStorage' is used
       }
     )

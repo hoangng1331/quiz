@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Image, Form, Modal, Input, message, Drawer } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
 const Start = () => {
   const { auth } = useAuth((state) => state);
@@ -9,7 +10,21 @@ const Start = () => {
   const [showModal, setShowModal] = React.useState(false);
   const [createForm] = Form.useForm();
   const navigate = useNavigate();
-
+  const validateUsername = (rule, value, callback) => {
+    const regex = /^[A-Za-z0-9_\.@]+$/;
+    if (!value || value.trim() === "" || regex.test(value)) {
+      callback();
+    } else {
+      callback();
+    }
+  };
+  const { login } = useAuth((state) => state);
+  const onFinish = (values, e) => {
+    const { email, password } = values;
+    login({ email, password });
+    loginForm.resetFields(["password"]);
+  };
+  const [loginForm] = Form.useForm();
   const handleStartQuiz = () => {
     if (auth) {
       navigate("/question", { state: { name: auth.name } });
@@ -66,14 +81,70 @@ const Start = () => {
         closable={true}
         onClose={() => setShowDrawer(false)}
         visible={showDrawer}
-        height={200}
+        height={400}
       >
-        <Button type="primary" block onClick={handleStartNow}>
-          Start Now
-        </Button>
-        <Button type="default" block onClick={handleLogin}>
-          Log in
-        </Button>
+        {" "}
+        <div>
+          <Form
+            form={loginForm}
+            name="login-form"
+            className="login-form"
+            initialValues={{ email: "", password: "" }}
+            onFinish={onFinish}
+            autoComplete="on"
+          >
+            {" "}
+            <Form.Item
+              name="email"
+              rules={[
+                { required: true, message: "Can not be blank" },
+                { validator: validateUsername },
+                { type: "email", message: "Invalid email!" },
+              ]}
+            >
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                placeholder="Input your email"
+              />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              rules={[
+                { required: true, message: "Can not be blank" },
+                {
+                  min: 1,
+                  max: 30,
+                  message: "At least 1 character",
+                },
+              ]}
+            >
+              <Input.Password
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                placeholder="Input your password"
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="login-form-button"
+              >
+                Log in
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+        <div style={{ textAlign: "center", fontWeight: "bold" }}>or</div>
+        <div style={{ textAlign: "center" }}>
+          <Button
+            className="login-form login-form-button"
+            type="default"
+            block
+            onClick={handleStartNow}
+          >
+            Start Now
+          </Button>
+        </div>
       </Drawer>
 
       <Modal

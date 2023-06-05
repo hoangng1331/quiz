@@ -149,7 +149,10 @@ function Question() {
   if (questions.length === 0) {
     return (
       <div className="question-loading">
-        <Spin indicator={<LoadingOutlined />} tip="Loading..." />
+        <Spin
+          indicator={<LoadingOutlined style={{ fontSize: "xx-large" }} />}
+          tip="Loading..."
+        />
       </div>
     );
   }

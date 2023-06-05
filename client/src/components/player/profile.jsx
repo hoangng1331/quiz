@@ -1,12 +1,14 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_URL } from "../constants/URLS";
-
-function Register() {
+import { useAuth } from "../../hooks/useAuth";
+import moment from "moment";
+import { API_URL } from "../../constants/URLS";
+function Information() {
   const dateRef = useRef(null);
+  const { auth, login } = useAuth((state) => state);
   const [passWord, setpassWord] = useState();
   const [firstName, setFirstName] = useState();
   const [lastName, setLastName] = useState();
@@ -14,8 +16,6 @@ function Register() {
   const [birthDay, setBirthDay] = useState();
   const [phoneNumber, setPhoneNumber] = useState();
   const [gender, setGender] = useState();
-  const [newPass, setNewPass] = useState();
-  const navigate = useNavigate();
   const handleChange = (event) => {
     switch (event.target.name) {
       case "password":
@@ -33,14 +33,11 @@ function Register() {
       case "birthday":
         setBirthDay(dateRef.current?.value);
         break;
-      case "phonenumber":
+      case "phoneNumber":
         setPhoneNumber(event.target.value);
         break;
       case "gender":
         setGender(event.target.value);
-        break;
-      case "newPass":
-        setNewPass(event.target.value);
         break;
 
       default:
@@ -48,7 +45,7 @@ function Register() {
     }
   };
 
-  const handelCreate = (event) => {
+  const handelChange = (event) => {
     event.preventDefault();
     const data = {
       password: passWord,
@@ -59,46 +56,45 @@ function Register() {
       birthday: birthDay,
       phoneNumber: phoneNumber,
     };
-    if (passWord === newPass) {
-      axios
-        .post(API_URL + "/players", data)
-        .then((res) => {
-          message.success("Tạo tài khoản thành công");
-          navigate("/login");
-        })
-        .catch((error) => {
-          message.error("Vui lòng kiểm tra lại thông tin");
-        });
-    } else {
-      message.error("Mật khẩu xác nhận không đúng");
-    }
+    axios
+      .patch(API_URL + "/players/" + auth.loggedInUser._id, data)
+      .then((res) => {
+        const { email, password } = res.data;
+        message.success("Success");
+        login({ email, password });
+      })
+      .catch((error) => {
+        message.error("Please check the information again!");
+      });
   };
   return (
     <div className="container-table">
       <div className="wrapper rounded bg-white">
-        <div className="h3">Create New User</div>
+        <div className="h3">Profile</div>
 
         <div className="form">
           <div className="row">
             <div className="col-md-6 mt-md-0 mt-3">
               <input
+                disabled
                 placeholder="Last Name"
                 type="text"
                 className="form-control short-input"
                 onChange={handleChange}
-                value={lastName ? lastName : ""}
                 name="lastName"
+                defaultValue={auth.loggedInUser.lastName}
                 required
               />
             </div>
             <div className="col-md-6 mt-md-0 mt-3">
               <input
+                disabled
                 placeholder="First Name"
                 type="text"
                 className="form-control short-input"
                 onChange={handleChange}
-                value={firstName ? firstName : ""}
                 name="firstName"
+                defaultValue={auth.loggedInUser.firstName}
                 required
               />
             </div>
@@ -112,6 +108,9 @@ function Register() {
                 onChange={handleChange}
                 ref={dateRef}
                 name="birthday"
+                defaultValue={moment(auth.loggedInUser.birthday).format(
+                  "YYYY-MM-DD"
+                )}
                 required
               />
             </div>
@@ -127,6 +126,9 @@ function Register() {
                     name="gender"
                     value="Male"
                     onChange={handleChange}
+                    defaultChecked={
+                      auth.loggedInUser.gender === "Male" ?? false
+                    }
                   />
                   Male
                   <span className="checkmark"></span>
@@ -137,6 +139,9 @@ function Register() {
                     name="gender"
                     value="Female"
                     onChange={handleChange}
+                    defaultChecked={
+                      auth.loggedInUser.gender === "Female" ?? false
+                    }
                   />
                   Female
                   <span className="checkmark"></span>
@@ -147,12 +152,13 @@ function Register() {
           <div className="row">
             <div className="col-md-6 mt-md-0 mt-3">
               <input
+                disabled
                 placeholder="Email"
                 type="email"
                 className="form-control short-input"
                 onChange={handleChange}
-                value={email ? email : ""}
                 name="email"
+                defaultValue={auth.loggedInUser.email}
                 required
               />
             </div>
@@ -162,32 +168,8 @@ function Register() {
                 type="tel"
                 className="form-control short-input"
                 onChange={handleChange}
-                value={phoneNumber ? phoneNumber : ""}
-                name="phonenumber"
-                required
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-6 mt-md-0 mt-3">
-              <input
-                placeholder="Password"
-                type="password"
-                className="form-control short-input"
-                onChange={handleChange}
-                value={passWord ? passWord : ""}
-                name="password"
-                required
-              />
-            </div>
-            <div className="col-md-6 mt-md-0 mt-3">
-              <input
-                placeholder="Confirm Password"
-                onChange={handleChange}
-                value={newPass ? newPass : ""}
-                name="newPass"
-                type="password"
-                className="form-control short-input"
+                name="phoneNumber"
+                defaultValue={auth.loggedInUser.phoneNumber}
                 required
               />
             </div>
@@ -196,9 +178,9 @@ function Register() {
             <div
               className="btn btn-dark btn-lg btn-block mt-3"
               style={{ textAlign: "center" }}
-              onClick={handelCreate}
+              onClick={handelChange}
             >
-              Register
+              Save changes
             </div>
           </div>
         </div>
@@ -207,4 +189,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Information;

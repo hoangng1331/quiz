@@ -23,9 +23,9 @@ function MainMenu() {
       }}
       theme="light"
       mode="horizontal"
-      defaultSelectedKeys={["2"]}
+      defaultSelectedKeys={["home"]}
       onSelect={(value) => {
-        navigate("/" + value.key);
+        navigate("/" + value.key.split("-").join("/"));
       }}
     >
       <Menu.Item key="top" style={{ position: "absolute", left: 0 }}>
@@ -43,7 +43,7 @@ function MainMenu() {
         <HomeOutlined style={{ fontSize: "x-large" }} />{" "}
         <strong className="hide-on-mobile">Home</strong>
       </Menu.Item>
-      <Menu.Item key="profile">
+      <Menu.Item key="profile-information">
         <UserOutlined style={{ fontSize: "x-large" }} />{" "}
         <strong className="hide-on-mobile">Profile</strong>
       </Menu.Item>
