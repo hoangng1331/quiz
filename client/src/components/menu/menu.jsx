@@ -33,7 +33,7 @@ function MainMenu() {
         <strong className="hide-on-mobile">Ranking</strong>
       </Menu.Item>
       <Menu.Item
-        key="start"
+        key="home"
         style={{
           position: "absolute",
           left: "50%",

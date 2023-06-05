@@ -5,7 +5,7 @@ import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const ReportDetails = () => {
   const location = useLocation();
-  const { questions, startTime, endTime } = location.state || {};
+  const { questions, startTime, endTime, pack } = location.state || {};
   let navigate = useNavigate();
 
   return (
@@ -51,7 +51,9 @@ const ReportDetails = () => {
         className="back-button"
         type="primary"
         onClick={() => {
-          navigate("/report", { state: { questions, startTime, endTime } });
+          navigate("/report", {
+            state: { questions, startTime, endTime, pack },
+          });
         }}
         icon={<ArrowLeftOutlined />}
       >

@@ -53,6 +53,9 @@ resultSchema.virtual("status").get(function () {
     return "Fail";
   }
 });
+resultSchema.virtual("package_question").get(function () {
+  return this.questions.length;
+});
 
 // Virtuals in console.log()
 resultSchema.set("toObject", { virtuals: true });

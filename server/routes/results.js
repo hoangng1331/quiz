@@ -113,5 +113,19 @@ router.get("/playerId/:playerId", function (req, res, next) {
     res.sendStatus(500);
   }
 });
+router.get("/package/:package_question", function (req, res, next) {
+  try {
+    const { package_question } = req.params;
+    Result.find({ package_question })
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((err) => {
+        res.status(400).send({ message: err.message });
+      });
+  } catch (err) {
+    res.sendStatus(500);
+  }
+});
 
 module.exports = router;

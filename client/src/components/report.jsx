@@ -7,7 +7,7 @@ const Report = () => {
   const [score, setScore] = useState(0);
   const [view, setView] = useState(false);
   const location = useLocation();
-  const { questions, startTime, endTime, name } = location.state || {};
+  const { questions, startTime, endTime, name, pack } = location.state || {};
   let navigate = useNavigate();
   let totalScore = 0;
   questions.forEach((question, index) => {
@@ -17,7 +17,7 @@ const Report = () => {
   });
 
   if (questions.length === 0) {
-    navigate("/start");
+    navigate("/start", { state: { pack } });
   }
 
   useEffect(() => {
@@ -29,7 +29,9 @@ const Report = () => {
     navigate("/start", { state: {} });
   };
   const viewResult = () => {
-    navigate("/reportdetails", { state: { questions, startTime, endTime } });
+    navigate("/reportdetails", {
+      state: { questions, startTime, endTime, pack },
+    });
   };
 
   const passFail = score > questions.length / 2 ? "Pass" : "Fail";

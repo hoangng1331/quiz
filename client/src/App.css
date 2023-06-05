@@ -294,11 +294,11 @@
 }
 
 .question {
-  transition: opacity 3s ease;
+  transition: opacity 3.5s ease;
 }
 
 .option {
-  transition: opacity 3s ease;
+  transition: opacity 3.5s ease;
 }
 
 .fade-out {
@@ -396,7 +396,7 @@
 }
 
 .question-container {
-  animation: flyOutDown 1s ease forwards;
+  animation: flyOutDown 3s ease forwards;
 }
 
 .question-container {
@@ -406,6 +406,39 @@
 .question-container.fade-out {
   transform: scale(0.5);
   opacity: 0;
+}
+.package-button {
+  height: 90px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  margin-bottom: 20px;
+  margin: 0 auto;
+}
+
+.package-button strong {
+  display: flex;
+  align-items: center;
+}
+
+.package-button svg {
+  margin-left: 10px;
+}
+
+@media (min-width: 768px) {
+  .package-button {
+    width: 600px;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .package-button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }
 
 .question-container.fade-in {

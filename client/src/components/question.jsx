@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Radio, Spin, message, Modal } from "antd";
+import { Radio, Spin, message, Progress } from "antd";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -19,13 +19,14 @@ function Question() {
   const [isTimerRunning, setIsTimerRunning] = useState(true);
   const [showQuestionInfo, setShowQuestionInfo] = useState(true);
   const [completed, setCompleted] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const location = useLocation();
-  const { name } = location.state || {};
+  const { name, pack } = location.state || {};
 
   const navigate = useNavigate();
-  if (!name && !auth) {
-    navigate("/start");
+  if (!name && !auth | !pack) {
+    navigate("/home");
   }
 
   useEffect(() => {
@@ -50,7 +51,9 @@ function Question() {
 
   const fetchQuestions = async () => {
     try {
-      const response = await axios.get("https://opentdb.com/api.php?amount=5");
+      const response = await axios.get(
+        "https://opentdb.com/api.php?amount=" + pack
+      );
       const data = response.data.results.map((question) => ({
         ...question,
         selected_answer: "",
@@ -92,6 +95,7 @@ function Question() {
         const randomIndex = Math.floor(Math.random() * messages.length);
         message.error(messages[randomIndex]);
       }
+      setProgress(currentQuestion + 1);
       const timer = setTimeout(() => {
         handleNextQuestion();
       }, 3000);
@@ -177,67 +181,86 @@ function Question() {
     return null;
   }
   const question = questions[currentQuestion];
+  const calculateProgress = () => {
+    const prog = (progress / questions.length) * 100;
+    return Math.floor(prog);
+  };
 
   return (
-    <div
-      className={`question-container ${selectedAnswer !== "" ? "" : "fade-in"}`}
-    >
-      {showQuestionInfo ? (
-        <div className="question-info">
-          <h3>Question {currentQuestion + 1}: </h3>
-          <p className="question-category">
-            This is question about {question.category}
-          </p>
-          <p className="question-difficulty">
-            Difficulty: {question.difficulty}
-          </p>
-        </div>
-      ) : (
-        <>
-          <div
-            className={`question ${selectedAnswer !== "" ? "fade-out" : ""}`}
-          >
-            <h2
+    <div style={{ textAlign: "center" }}>
+      <Progress
+        percent={calculateProgress()}
+        status="active"
+        strokeColor={{ from: "#e91010", to: "#87d068" }}
+        format={() => (
+          <strong>
+            {progress}/{pack}
+          </strong>
+        )}
+        size={[(window.innerWidth * 95) / 100]}
+      />
+      <div
+        className={`question-container ${
+          selectedAnswer !== "" ? "" : "fade-in"
+        }`}
+      >
+        {showQuestionInfo ? (
+          <div className="question-info">
+            <h3>Question {currentQuestion + 1}: </h3>
+            <p className="question-category">
+              This is question about {question.category}
+            </p>
+            <p className="question-difficulty">
+              Difficulty: {question.difficulty}
+            </p>
+          </div>
+        ) : (
+          <>
+            <div
+              className={`question ${selectedAnswer !== "" ? "fade-out" : ""}`}
+            >
+              <h2
+                className={`question-text ${
+                  selectedAnswer !== "" ? "fade-out" : "fade-in"
+                }`}
+              >
+                {question?.question}
+              </h2>
+            </div>
+            <Radio.Group
+              onChange={handleAnswerChange}
+              value={selectedAnswer}
+              style={{ display: "block" }}
               className={`question-text ${
                 selectedAnswer !== "" ? "fade-out" : "fade-in"
               }`}
             >
-              {question?.question}
-            </h2>
-          </div>
-          <Radio.Group
-            onChange={handleAnswerChange}
-            value={selectedAnswer}
-            style={{ display: "block" }}
-            className={`question-text ${
-              selectedAnswer !== "" ? "fade-out" : "fade-in"
-            }`}
-          >
-            {shuffledAnswers.map((answer, index) => (
-              <Radio.Button
-                style={{ borderRadius: 0 }}
-                className={
-                  selectedAnswer === answer &&
-                  answer === question.correct_answer
-                    ? "correct-answer"
-                    : selectedAnswer === answer &&
-                      answer !== question.correct_answer
-                    ? "wrong-answer"
-                    : "answer-option"
-                }
-                key={index}
-                value={answer}
-                disabled={selectedAnswer !== ""}
-              >
-                {answer}
-              </Radio.Button>
-            ))}
-          </Radio.Group>
-          <div>
-            <span className="timer">{formatTime(currentTime)}</span>
-          </div>
-        </>
-      )}
+              {shuffledAnswers.map((answer, index) => (
+                <Radio.Button
+                  style={{ borderRadius: 0 }}
+                  className={
+                    selectedAnswer === answer &&
+                    answer === question.correct_answer
+                      ? "correct-answer"
+                      : selectedAnswer === answer &&
+                        answer !== question.correct_answer
+                      ? "wrong-answer"
+                      : "answer-option"
+                  }
+                  key={index}
+                  value={answer}
+                  disabled={selectedAnswer !== ""}
+                >
+                  {answer}
+                </Radio.Button>
+              ))}
+            </Radio.Group>
+            <div>
+              <span className="timer">{formatTime(currentTime)}</span>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 }

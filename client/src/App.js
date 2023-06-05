@@ -19,6 +19,8 @@ import ChangePass from "./components/player/ChangePassword";
 import ProfileMenu from "./components/menu/profilemenu";
 import History from "./components/player/history";
 import HistoryDetails from "./components/player/historydetails";
+import Rank from "./components/React-query/Rank";
+import Home from "./components/home";
 
 const { Header, Content, Footer } = Layout;
 function App() {
@@ -29,12 +31,12 @@ function App() {
     axios.get(`${API_URL}/players`).then((res) => {
       setWakeUp(res);
     });
-  });
+  }, []);
   React.useEffect(() => {
     const showProfileMenu =
       auth && window.location.pathname.includes("/profile");
     setDisplayProfileMenu(showProfileMenu);
-  }, [auth, window]);
+  }, [auth, window.location.pathname]);
   if (!wakeUp) {
     return (
       <div className="question-loading">
@@ -80,12 +82,13 @@ function App() {
         <Content className="content">
           {displayProfileMenu && <ProfileMenu />}
           <Routes>
-            <Route exact path="/" element={<Navigate to="/start" replace />} />
+            <Route exact path="/" element={<Navigate to="/home" replace />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/start" element={<Start />} />
             <Route path="/question" element={<Question />} />
             <Route path="/report" element={<Report />} />
             <Route path="/reportdetails" element={<ReportDetails />} />
-            <Route path="/top" element={<RankingTable />} />
+            <Route path="/top" element={<Rank />} />
             {auth && (
               <>
                 <Route path="/profile/changepass" element={<ChangePass />} />
