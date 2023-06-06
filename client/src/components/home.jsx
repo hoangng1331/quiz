@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineRight } from "react-icons/ai";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 const Home = () => {
   const navigate = useNavigate();
   const [selectedPackage, setSelectedPackage] = useState(0);
+  const [appear, setAppear] = useState(1);
 
   const packages = [5, 10, 15, 20];
 
@@ -17,9 +19,21 @@ const Home = () => {
     }, 1000);
   };
 
+  useEffect(() => {
+    const buttons = document.querySelectorAll(".package-button");
+    buttons.forEach((button, index) => {
+      setTimeout(() => {
+        button.classList.add("slide-up");
+      }, index * 300);
+    });
+    setTimeout(() => {
+      setAppear(appear + 1);
+    }, 1500);
+  }, []);
+
   const slideButtons = (selectedIndex) => {
-    const buttons = document.getElementsByClassName("package-button");
-    const offset = 100; // Slide offset in pixels
+    const buttons = document.getElementsByClassName("package-button-chosen");
+    const offset = 100;
 
     for (let i = 0; i < buttons.length; i++) {
       if (i === selectedIndex) continue;
@@ -41,15 +55,16 @@ const Home = () => {
         {packages.map((packageSize, index) => (
           <Button
             key={index}
-            className={`package-button ${
-              selectedPackage === index ? "selected" : ""
-            }`}
+            className={
+              appear >= 2
+                ? `package-button-chosen ${
+                    selectedPackage === index ? "selected" : ""
+                  }`
+                : `package-button ${
+                    selectedPackage === index ? "selected" : ""
+                  }`
+            }
             onClick={() => handlePackageSelect(packageSize, index)}
-            style={{
-              transition: "transform 1s, opacity 1s",
-              opacity: 1,
-              justifyContent: "space-between",
-            }}
           >
             <strong>Package: {packageSize} questions</strong>{" "}
             <strong>
