@@ -128,7 +128,7 @@ router.get("/package/:package_question", function (req, res, next) {
   }
 });
 router.get(
-  "/playerId/:playerId/package/:package_question",
+  "/playerId/:playerId/package_question/:package_question",
   function (req, res, next) {
     try {
       const { playerId, package_question } = req.params;
