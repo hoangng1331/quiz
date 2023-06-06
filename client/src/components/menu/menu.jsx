@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 
 function MainMenu() {
   let navigate = useNavigate();
-
   return (
     <Menu
       className="menu"
@@ -23,7 +22,6 @@ function MainMenu() {
       }}
       theme="light"
       mode="horizontal"
-      defaultSelectedKeys={["home"]}
       onSelect={(value) => {
         navigate("/" + value.key.split("-").join("/"));
       }}

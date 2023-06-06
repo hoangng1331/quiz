@@ -26,7 +26,7 @@ const Report = () => {
 
   const resetQuiz = () => {
     setScore(0);
-    navigate("/start", { state: {} });
+    navigate("/start", { state: { pack } });
   };
   const viewResult = () => {
     navigate("/reportdetails", {

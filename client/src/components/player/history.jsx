@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button } from "antd";
+import { Table, Button, Menu } from "antd";
 import axios from "axios";
 import moment from "moment";
 import { EyeOutlined } from "@ant-design/icons";
@@ -8,6 +8,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 const History = () => {
+  const [pack, setPack] = React.useState(5);
   let navigate = useNavigate();
   const [historyData, setHistoryData] = useState([]);
   const playerId = useAuth((state) => state.auth.loggedInUser._id);
@@ -22,14 +23,14 @@ const History = () => {
   };
   useEffect(() => {
     axios
-      .get(`${API_URL}/results/playerId/${playerId}`)
+      .get(`${API_URL}/results/playerId/${playerId}/package_question/${pack}`)
       .then((response) => {
         setHistoryData(response.data);
       })
       .catch((error) => {
         console.log("Error:", error);
       });
-  }, [playerId]);
+  }, [playerId, pack]);
 
   const columns = [
     {
@@ -95,6 +96,35 @@ const History = () => {
 
   return (
     <div className="container-table">
+      <Menu
+        className="menu"
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          fontSize: "xx-large",
+        }}
+        theme="light"
+        mode="horizontal"
+        defaultSelectedKeys={["5"]}
+        onSelect={(value) => {
+          setPack(value.key);
+        }}
+      >
+        <Menu.Item key="5">
+          <strong>5</strong>
+        </Menu.Item>
+        <Menu.Item key="10">
+          <strong>10</strong>
+        </Menu.Item>
+        <Menu.Item key="15">
+          <strong>15</strong>
+        </Menu.Item>
+        <Menu.Item key="20">
+          <strong>20</strong>
+        </Menu.Item>
+      </Menu>
+      <h2>{pack} Questions</h2>
       <Table
         dataSource={historyData}
         columns={columns}

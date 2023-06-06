@@ -138,7 +138,9 @@ function Question() {
     }
   }, [isTimerRunning, showQuestionInfo]);
   const handleQuizFinish = () => {
-    navigate("/report", { state: { questions, startTime, endTime, name } });
+    navigate("/report", {
+      state: { questions, startTime, endTime, name, pack },
+    });
   };
 
   const shuffleArray = (array) => {

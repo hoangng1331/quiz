@@ -48,7 +48,7 @@ const RankingTable = () => {
       const top20Data = sortedData.slice(0, 20);
       return top20Data;
     },
-    { refetchInterval: 3000 }
+    { refetchInterval: 1000 }
   );
 
   const columns = [
