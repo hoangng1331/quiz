@@ -15,7 +15,6 @@ const Start = () => {
   const { pack } = location.state || {};
   if (!pack) {
     navigate("/home");
-    return null;
   }
   const validateUsername = (rule, value, callback) => {
     const regex = /^[A-Za-z0-9_\.@]+$/;
