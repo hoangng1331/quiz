@@ -23,7 +23,7 @@ const History = () => {
   };
   useEffect(() => {
     axios
-      .get(`${API_URL}/results/playerId/${playerId}/package_question/${pack}`)
+      .get(`${API_URL}/results/playerId/${playerId}/package/${pack}`)
       .then((response) => {
         setHistoryData(response.data);
       })

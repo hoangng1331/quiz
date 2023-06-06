@@ -132,7 +132,7 @@ router.get(
   function (req, res, next) {
     try {
       const { playerId, package_question } = req.params;
-      Result.find({ playerId, package_question })
+      Result.findOne({ playerId: playerId, package_question: package_question })
         .then((result) => {
           res.send(result);
         })
