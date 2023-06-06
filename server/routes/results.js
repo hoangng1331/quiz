@@ -13,6 +13,7 @@ const router = express.Router();
 router.get("/", function (req, res, next) {
   try {
     Result.find()
+      .populate("player")
       .then((result) => {
         res.send(result);
       })
@@ -29,6 +30,7 @@ router.get("/:_id", function (req, res, next) {
   try {
     const { _id } = req.params;
     Result.findById(_id)
+      .populate("player")
       .then((result) => {
         res.send(result);
       })
@@ -103,6 +105,7 @@ router.get("/playerId/:playerId", function (req, res, next) {
   try {
     const { playerId } = req.params;
     Result.find({ playerId })
+      .populate("player")
       .then((result) => {
         res.send(result);
       })
@@ -117,6 +120,7 @@ router.get("/package/:package_question", function (req, res, next) {
   try {
     const { package_question } = req.params;
     Result.find({ package_question })
+      .populate("player")
       .then((result) => {
         res.send(result);
       })
@@ -133,6 +137,7 @@ router.get(
     try {
       const { playerId, package_question } = req.params;
       Result.find({ playerId: playerId, package_question: package_question })
+        .populate("player")
         .then((result) => {
           res.send(result);
         })

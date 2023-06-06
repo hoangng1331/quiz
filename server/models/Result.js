@@ -54,6 +54,12 @@ resultSchema.virtual("status").get(function () {
     return "Fail";
   }
 });
+resultSchema.virtual("player", {
+  ref: "Player",
+  localField: "playerId",
+  foreignField: "_id",
+  justOne: true,
+});
 
 // Virtuals in console.log()
 resultSchema.set("toObject", { virtuals: true });
