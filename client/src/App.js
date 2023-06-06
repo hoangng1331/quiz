@@ -41,7 +41,7 @@ function App() {
         });
       }, 1500);
     }
-  });
+  }, [players, auth]);
 
   if (!wakeUp) {
     return (
