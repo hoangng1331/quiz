@@ -64,6 +64,7 @@ const Start = () => {
   };
   if (!pack) {
     navigate("/home");
+    return null;
   }
 
   return (

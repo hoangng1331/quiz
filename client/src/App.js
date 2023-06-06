@@ -62,7 +62,7 @@ function App() {
           style={{ display: "flex", justifyContent: "space-between" }}
         >
           <h1>
-            <Link to="/start" className="active">
+            <Link to="/home" className="active">
               Online Quiz
             </Link>
           </h1>
