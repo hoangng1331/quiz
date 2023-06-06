@@ -13,6 +13,10 @@ const Start = () => {
   let navigate = useNavigate();
   const location = useLocation();
   const { pack } = location.state || {};
+  if (!pack) {
+    navigate("/home");
+    return null;
+  }
   const validateUsername = (rule, value, callback) => {
     const regex = /^[A-Za-z0-9_\.@]+$/;
     if (!value || value.trim() === "" || regex.test(value)) {
@@ -62,10 +66,6 @@ const Start = () => {
   const handleModalCancel = () => {
     setShowModal(false);
   };
-  if (!pack) {
-    navigate("/home");
-    return null;
-  }
 
   return (
     <div>
