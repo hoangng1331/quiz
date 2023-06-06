@@ -62,6 +62,48 @@ const Report = () => {
         <p className="subtitle">Total Questions: {questions.length}</p>
         <p className="subtitle">Correct Answers: {score}</p>
         <p className="result">Result: {passFail}</p>
+        {passFail === "Fail" && (
+          <>
+            <p
+              style={{
+                fontSize: "x-large",
+                fontWeight: "bold",
+                marginBottom: -5,
+              }}
+            >
+              Oops!
+            </p>
+            <p
+              style={{
+                fontSize: "large",
+                fontWeight: "bold",
+              }}
+            >
+              Bad luck! Your record won't be ranked
+            </p>
+          </>
+        )}
+        {passFail === "Pass" && (
+          <>
+            <p
+              style={{
+                fontSize: "x-large",
+                fontWeight: "bold",
+                marginBottom: -5,
+              }}
+            >
+              Wow!
+            </p>
+            <p
+              style={{
+                fontSize: "large",
+                fontWeight: "bold",
+              }}
+            >
+              You're amazing! Congrats!
+            </p>
+          </>
+        )}
         <div className="button-container">
           <Button className="button" onClick={viewResult}>
             View Result
