@@ -16,6 +16,14 @@ const HistoryDetails = () => {
   }, [resultId]);
   return (
     <div className="report-details">
+      <Button
+        onClick={() => {
+          navigate("/profile", { state: { pages: "profile-history" } });
+        }}
+        style={{ border: "none", background: "none" }}
+        icon={<ArrowLeftOutlined style={{ fontSize: "x-large" }} />}
+      />
+
       <h2>History Details</h2>
       {questions?.map((question, index) => (
         <div className="question" key={index}>
@@ -53,16 +61,6 @@ const HistoryDetails = () => {
           )}
         </div>
       ))}
-      <Button
-        className="back-button"
-        type="primary"
-        onClick={() => {
-          navigate("/profile/history");
-        }}
-        icon={<ArrowLeftOutlined />}
-      >
-        Go Back
-      </Button>
     </div>
   );
 };

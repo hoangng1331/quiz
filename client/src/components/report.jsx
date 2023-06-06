@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { API_URL } from "../constants/URLS";
+import { BiArrowBack } from "react-icons/bi";
 const Report = () => {
   const [score, setScore] = useState(0);
   const [view, setView] = useState(false);
@@ -49,33 +48,42 @@ const Report = () => {
   const totalTime = endTime - startTime - questions.length * 8000;
 
   return (
-    <div className="report-container" style={{ textAlign: "center" }}>
-      <h2 className="title">Quiz Result</h2>
-      <p className="subtitle">Total time: {formatTime(totalTime)}</p>
-      <p className="subtitle">Total Questions: {questions.length}</p>
-      <p className="subtitle">Correct Answers: {score}</p>
-      <p className="result">Result: {passFail}</p>
-      <div className="button-container">
-        <Button className="button" onClick={viewResult}>
-          View Result
-        </Button>
-        <Button
-          className="button"
-          onClick={() => {
-            setView(true);
-          }}
+    <div>
+      <Button
+        style={{ border: "none", background: "none" }}
+        icon={<BiArrowBack style={{ fontSize: "x-large" }} />}
+        onClick={() => {
+          navigate("/home");
+        }}
+      />
+      <div className="report-container" style={{ textAlign: "center" }}>
+        <h2 className="title">Quiz Result</h2>
+        <p className="subtitle">Total time: {formatTime(totalTime)}</p>
+        <p className="subtitle">Total Questions: {questions.length}</p>
+        <p className="subtitle">Correct Answers: {score}</p>
+        <p className="result">Result: {passFail}</p>
+        <div className="button-container">
+          <Button className="button" onClick={viewResult}>
+            View Result
+          </Button>
+          <Button
+            className="button"
+            onClick={() => {
+              setView(true);
+            }}
+          >
+            Restart Quiz
+          </Button>
+        </div>
+        <Modal
+          centered
+          open={view}
+          onOk={resetQuiz}
+          onCancel={() => setView(false)}
         >
-          Restart Quiz
-        </Button>
+          <h4>Do you want to take this quiz again?</h4>
+        </Modal>
       </div>
-      <Modal
-        centered
-        open={view}
-        onOk={resetQuiz}
-        onCancel={() => setView(false)}
-      >
-        <h4>Do you want to take this quiz again?</h4>
-      </Modal>
     </div>
   );
 };

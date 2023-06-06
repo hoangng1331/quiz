@@ -165,7 +165,8 @@ const RankingTable = () => {
             <strong>20</strong>
           </Menu.Item>
         </Menu>
-        <h2>Ranking Table</h2>
+        <h2>Ranking</h2>
+        <p>Package: {pack} questions</p>
         <Table
           dataSource={rankingData}
           columns={columns}

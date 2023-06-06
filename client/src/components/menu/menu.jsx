@@ -41,7 +41,7 @@ function MainMenu() {
         <HomeOutlined style={{ fontSize: "x-large" }} />{" "}
         <strong className="hide-on-mobile">Home</strong>
       </Menu.Item>
-      <Menu.Item key="profile-information">
+      <Menu.Item key="profile">
         <UserOutlined style={{ fontSize: "x-large" }} />{" "}
         <strong className="hide-on-mobile">Profile</strong>
       </Menu.Item>

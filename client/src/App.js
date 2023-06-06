@@ -5,12 +5,11 @@ import Question from "./components/question";
 import ReportDetails from "./components/reportdetails";
 import Report from "./components/report";
 import "./App.css";
-import { Layout, Spin } from "antd";
+import { Layout, Spin, Image } from "antd";
 import Login from "./components/Login";
 import MainMenu from "./components/menu/menu";
 import Register from "./components/Register";
 import { useAuth } from "./hooks/useAuth";
-import RankingTable from "./components/Top";
 import Information from "./components/player/profile";
 import axios from "axios";
 import { API_URL } from "./constants/URLS";
@@ -21,22 +20,29 @@ import History from "./components/player/history";
 import HistoryDetails from "./components/player/historydetails";
 import Rank from "./components/React-query/Rank";
 import Home from "./components/home";
+import IndexProfile from "./components/player/indexprofile";
 
 const { Header, Content, Footer } = Layout;
 function App() {
-  const [displayProfileMenu, setDisplayProfileMenu] = React.useState();
   const [wakeUp, setWakeUp] = React.useState(null);
+  const [players, setPlayers] = React.useState();
   const { auth, logout } = useAuth((state) => state);
   React.useEffect(() => {
     axios.get(`${API_URL}/players`).then((res) => {
       setWakeUp(res);
     });
   }, []);
+
   React.useEffect(() => {
-    const showProfileMenu =
-      auth && window.location.pathname.includes("/profile");
-    setDisplayProfileMenu(showProfileMenu);
-  }, [auth, window.location.pathname]);
+    if (auth) {
+      setTimeout(() => {
+        axios.get(`${API_URL}/players/${auth.loggedInUser._id}`).then((res) => {
+          setPlayers(res.data);
+        });
+      }, 1500);
+    }
+  });
+
   if (!wakeUp) {
     return (
       <div className="question-loading">
@@ -65,6 +71,15 @@ function App() {
               {" "}
               <div style={{ display: "flex", color: "white" }}></div>
               <div style={{ display: "flex", color: "white" }}>
+                <Image
+                  style={{ borderRadius: "50%", marginInline: -8 }}
+                  width={40}
+                  src={
+                    players?.imageUrl !== undefined
+                      ? `${API_URL}${players?.imageUrl}`
+                      : "no-ava.jpg"
+                  }
+                />{" "}
                 <strong>{auth?.loggedInUser?.firstName}</strong>
                 <span style={{ marginInline: 8 }}>|</span>
                 <strong
@@ -80,7 +95,6 @@ function App() {
           )}
         </Header>
         <Content className="content">
-          {displayProfileMenu && <ProfileMenu />}
           <Routes>
             <Route exact path="/" element={<Navigate to="/home" replace />} />
             <Route path="/home" element={<Home />} />
@@ -91,14 +105,11 @@ function App() {
             <Route path="/top" element={<Rank />} />
             {auth && (
               <>
-                <Route path="/profile/changepass" element={<ChangePass />} />
-
-                <Route path="/profile/information" element={<Information />} />
-                <Route path="/profile/history" element={<History />} />
+                <Route path="/profile" element={<IndexProfile />} />
                 <Route path="/results/:resultId" element={<HistoryDetails />} />
                 <Route
                   path="/login"
-                  element={<Navigate to="/profile/information" replace />}
+                  element={<Navigate to="/profile" replace />}
                 />
                 <Route
                   path="/register"
@@ -110,6 +121,10 @@ function App() {
               <>
                 <Route
                   path="/results/:resultId"
+                  element={<Navigate to="/login" replace />}
+                />
+                <Route
+                  path="/profile"
                   element={<Navigate to="/login" replace />}
                 />
                 <Route
