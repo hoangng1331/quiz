@@ -78,11 +78,12 @@ function Information() {
   }, [refresh, auth]);
   React.useEffect(() => {
     if (auth) {
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         axios.get(`${API_URL}/players/${auth.loggedInUser._id}`).then((res) => {
           setPlayers(res.data);
         });
       }, 1500);
+      return () => clearTimeout(timeout);
     }
   });
   return (
